@@ -107,7 +107,7 @@ Function.prototype.customApply=function(context = {}, args = []) {
 //// purchasedCar.customApply(car,['₹',10000000])
 
 //!-----------------------------------------------------------------------------------------------------------------------------------------
-//* 5) Polyfill for bind() method
+//* 6) Polyfill for bind() method
 // ? Syntax for reference => bind(thisArg, arg1, arg2, /* …, */ argN)
 // ? Polyfill implementation for bind()
 Function.prototype.customBind=function(context = {}, args = []) {
@@ -124,3 +124,60 @@ Function.prototype.customBind=function(context = {}, args = []) {
 const newFun=purchasedCar.customBind(car,'₹');
 // TODO: To see output of above polyfill uncomment below console.log
 //// console.log(newFun(1000000));
+
+//!-----------------------------------------------------------------------------------------------------------------------------------------
+
+// ? Closures in Javascript
+
+// * 7) Polyfill for once function which will run only once if we call it more then one time.
+// ? Polyfill implementation for once()
+function once(func,context) {
+    let ran;
+    
+    return function() {
+        if(func) {
+            ran=func.apply(context||this,arguments);
+            func=null;
+        }
+        
+        return ran;
+    };
+}
+//? Example
+const hello=once((a,b) => console.log('This will be called once',a,b));
+// TODO: To see output of above polyfill uncomment below lines
+//// hello(1,2);
+//// hello(2,3);
+//// hello(3,4);
+//// hello(3,4);
+
+//!-----------------------------------------------------------------------------------------------------------------------------------------
+
+// * 8) Implement Caching/Memoize Function
+// ? Polyfill implementation
+function customMemoize(fn,context) {
+    const res={};
+    return function (...args) {
+        var argsCache=JSON.stringify(args);
+        if(!res[argsCache]) {
+            res[argsCache]=fn.call(context||this,...args);
+        }
+        
+        return res[argsCache];
+    }
+}
+//? Example
+const clumsyProduct=(num1, num2) => {
+    for (let i = 0; i < 100000000; i++) {
+        return num1*num2;
+    }
+}
+const memoizedClumsyProduct=customMemoize(clumsyProduct);
+// TODO: To see output of above polyfill uncomment below lines
+//// console.time("First call");
+//// console.log(clumsyProduct(9467,7469));
+//// console.timeEnd("First call");
+
+//// console.time("Second call");
+//// console.log(clumsyProduct(9467,7469));
+//// console.timeEnd("Second call");
