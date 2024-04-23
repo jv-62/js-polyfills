@@ -181,3 +181,11 @@ const memoizedClumsyProduct=customMemoize(clumsyProduct);
 //// console.time("Second call");
 //// console.log(clumsyProduct(9467,7469));
 //// console.timeEnd("Second call");
+
+//!-----------------------------------------------------------------------------------------------------------------------------------------
+
+// * 9) Polyfill for promise
+// ? Implementation of promise
+function customPromise(params) {
+    // In Progress
+}
